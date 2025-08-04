@@ -6,9 +6,11 @@ import com.w3bd3vm4n.tm01_agenda_api.mapper.TaskMapper;
 import com.w3bd3vm4n.tm01_agenda_api.model.Task;
 import com.w3bd3vm4n.tm01_agenda_api.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -20,9 +22,17 @@ public class TaskController {
     @Autowired
     private TaskMapper taskMapper;
 
-    @GetMapping
-    public List<TaskResponseDTO> getAllTasks() {
-        return taskMapper.mapToTaskResponseDTOList(taskService.getTasksListFromRepository());
+//    @GetMapping
+//    public List<TaskResponseDTO> getAllTasks() {
+//        return taskMapper.mapToTaskResponseDTOList(taskService.getTasksListFromRepository());
+//    }
+
+    @GetMapping("/between")
+    public List<TaskResponseDTO> getTasksInDateRange(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        List<Task> tasks = taskService.getTasksListByStartEndDate(startDate, endDate);
+        return taskMapper.mapToTaskResponseDTOList(tasks);
     }
 
     @GetMapping("/{id}")

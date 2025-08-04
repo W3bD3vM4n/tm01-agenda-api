@@ -5,6 +5,7 @@ import com.w3bd3vm4n.tm01_agenda_api.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,8 +15,12 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    public List<Task> getTasksListFromRepository() {
-        return taskRepository.findAll();
+//    public List<Task> getTasksListFromRepository() {
+//        return taskRepository.findAll();
+//    }
+
+    public List<Task> getTasksListByStartEndDate(LocalDateTime startDate, LocalDateTime endDate) {
+        return taskRepository.findByStartDateBetween(startDate, endDate);
     }
 
     public Optional<Task> getTaskByIdFromRepository(Long id) {
