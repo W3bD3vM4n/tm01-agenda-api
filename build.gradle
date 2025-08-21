@@ -29,6 +29,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // To know if the API can talk to the DB (status)
+    // curl http://localhost:8080/actuator/health | jq
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	runtimeOnly 'org.postgresql:postgresql'
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
