@@ -4,6 +4,7 @@ import com.w3bd3vm4n.tm01_agenda_api.dto.TaskCreateDTO;
 import com.w3bd3vm4n.tm01_agenda_api.dto.TaskResponseDTO;
 import com.w3bd3vm4n.tm01_agenda_api.model.Task;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ public interface TaskMapper {
     List<TaskResponseDTO> mapToTaskResponseDTOList(List<Task> tasks);
 
     Task mapToTask(TaskCreateDTO dto);
+
+    void updateTaskFromDto(TaskCreateDTO dto, @MappingTarget Task task);
 
 }

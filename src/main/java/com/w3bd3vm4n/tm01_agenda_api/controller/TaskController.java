@@ -35,9 +35,22 @@ public class TaskController {
         return taskMapper.mapToTaskResponseDTOList(tasks);
     }
 
+    @GetMapping("/relevance-options")
+    public ResponseEntity<List<Integer>> getRelevanceOptions() {
+        return ResponseEntity.ok(List.of(1, 2, 3, 4));
+    }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+//        return taskService.getTaskByIdFromRepository(id)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long id) {
         return taskService.getTaskByIdFromRepository(id)
+                .map(taskMapper::mapToTaskResponseDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -55,22 +68,34 @@ public class TaskController {
         return ResponseEntity.ok(responseDTO);
     }
 
+//    @PutMapping("/{id}")
+//    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long id, @RequestBody TaskCreateDTO taskCreateDTO) {
+//        return taskService.getTaskByIdFromRepository(id)
+//                .map(existingTask -> {
+//                    existingTask.setTitle(taskCreateDTO.getTitle());
+//                    existingTask.setStartDate(taskCreateDTO.getStartDate());
+//                    existingTask.setEndDate(taskCreateDTO.getEndDate());
+//                    existingTask.setRelevance(taskCreateDTO.getRelevance());
+//                    existingTask.setEnergy(taskCreateDTO.getEnergy());
+//                    existingTask.setColor(taskCreateDTO.getColor());
+//                    existingTask.setDetail(taskCreateDTO.getDetail());
+//
+//                    Task updatedTask = taskService.saveTaskFromRepository(existingTask);
+//                    TaskResponseDTO responseDTO = taskMapper.mapToTaskResponseDTO(updatedTask);
+//
+//                    return ResponseEntity.ok(responseDTO);
+//                })
+//                .orElse(ResponseEntity.notFound().build());
+//    }
+
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long id, @RequestBody TaskCreateDTO taskCreateDTO) {
         return taskService.getTaskByIdFromRepository(id)
                 .map(existingTask -> {
-                    existingTask.setTitle(taskCreateDTO.getTitle());
-                    existingTask.setStartDate(taskCreateDTO.getStartDate());
-                    existingTask.setEndDate(taskCreateDTO.getEndDate());
-                    existingTask.setRelevance(taskCreateDTO.getRelevance());
-                    existingTask.setEnergy(taskCreateDTO.getEnergy());
-                    existingTask.setColor(taskCreateDTO.getColor());
-                    existingTask.setDetail(taskCreateDTO.getDetail());
+                    taskMapper.updateTaskFromDto(taskCreateDTO, existingTask);
 
                     Task updatedTask = taskService.saveTaskFromRepository(existingTask);
-                    TaskResponseDTO responseDTO = taskMapper.mapToTaskResponseDTO(updatedTask);
-
-                    return ResponseEntity.ok(responseDTO);
+                    return ResponseEntity.ok(taskMapper.mapToTaskResponseDTO(updatedTask));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
